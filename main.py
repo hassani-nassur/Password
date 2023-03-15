@@ -35,9 +35,12 @@ def setpassword():
 # fonction d'affichage du mot de pass
 def getListElements():
     # recuperation des donnée dans le fichier json
-    with open("conservepassword.json") as contenues:
-        fileElements = json.load(contenues)
-    
+    try:
+        
+        with open("conservepassword.json") as contenues:
+            fileElements = json.load(contenues)
+    except Exception:
+        fileElements = []
     # information de la fenetre
     fenetre1 = tk.Tk()
     fenetre1.geometry("500x400")
@@ -55,7 +58,7 @@ def getListElements():
     Tablelement.column(1,width=20)
     Tablelement.column(2,width=100)
     Tablelement.column(3,width=90)
-    
+   
     for element in fileElements :
         id = element['id']
         nameUser = element['nameUser']
@@ -63,7 +66,6 @@ def getListElements():
         tab = [id,nameUser,password]
         Tablelement.insert("",END,values=tab)
     
-    fileElements.close() #fermeture du fichier
 
    
 # fonction de verification du mot de passe
@@ -120,8 +122,11 @@ def getEntry():
                 with open("conservepassword.json",'r') as line:
                     contenue = json.load(line)
             except Exception:
-                messagebox.showerror("Error",f"le fichier Password.json n'existe pas" ,parent=fenetre)
-                open("conservepassword.json",'x')
+                f = open("conservepassword.json",'w')
+                f.write(json.dumps([]))
+                f.close()
+                with open("conservepassword.json",'r') as line:
+                    contenue = json.load(line)
 
             if contenue == None:
                 contenue = []
